@@ -4,9 +4,7 @@ pipeline {
         
         stage ('Build') {
             steps {
-                maven(maven : 'Maven_3.5.0'){
                     bat 'mvn clean package'
-                }
             }
         }
         stage ('Deploy') {
