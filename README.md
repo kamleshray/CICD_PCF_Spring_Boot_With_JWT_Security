@@ -31,3 +31,7 @@ https://console.run.pivotal.io/
 Go to routes to check the app URL:  https://productservice.cfapps.io/swagger-ui.html#/
 
 If you want to remove your app from cloud use command  : cf delete ProductService
+
+
+
+Add your PCF credentials in to Jenkins while creating JOb
