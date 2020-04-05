@@ -8,7 +8,7 @@ Create a account in https://login.run.pivotal.io/login
 How to deploy application on Pivotal Cloud Foundry
 Download Cloud Foundry CLI using below URL:
 Link: https://github.com/cloudfoundry/cli#installers-and-compressed-binaries
-Direct Link: https://packages.cloudfoundry.org/stable?release=windows64&version=v7&source=github
+
 
 In your application add a file manifest.yml with below configuration
 =====================================================================
@@ -22,7 +22,7 @@ applications:
 
 ===================================================  
 
-Use command > cf login  and login to application
+Use command > cf login  and login to application  if it will ask for APIEndpoint use http://api.run.pivotal.io
 
 Go into your application location and use command: cf push
 This command will automatically deploy and start your application on PCF, you can see the details by login to PCF console  
