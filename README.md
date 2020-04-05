@@ -34,4 +34,4 @@ If you want to remove your app from cloud use command  : cf delete ProductServic
 
 
 
-Add your PCF credentials in to Jenkins while creating JOb
+Add your PCF credentials in to Jenkins while creating Pipeline Job
