@@ -1,14 +1,10 @@
 package com.ps.controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -29,19 +25,11 @@ import io.swagger.annotations.ApiResponses;
 @RestController
 @RequestMapping("/product/secure")
 @CrossOrigin
-@Api(tags = "3- Secure-Endpoints", description = "Secure Product Management")
+@Api(tags = "3- Secured Endpoints", description = "Secure Product Management")
 public class SecureProductController {
 
 	@Autowired
 	private ProductService service;
-
-	@PreAuthorize("hasAuthority('ADMIN') or hasAuthority('USER')")
-	@GetMapping(value = "/getAll", produces = MediaType.APPLICATION_JSON_VALUE)
-	@ApiOperation("Get All Product List")
-	@ApiResponses(value = { @ApiResponse(code = 200, message = "Product List retrived Successfully") })
-	public ResponseEntity<List<Product>> getAllProduct(@RequestHeader("Authorization") String authorizationToken) {
-		return ResponseEntity.ok(service.getAllProduct());
-	}
 
 	@PreAuthorize("hasAuthority('ADMIN') or hasAuthority('USER')")
 	@PostMapping("/add")
@@ -86,17 +74,5 @@ public class SecureProductController {
 		}
 	}
 
-	@GetMapping("/get/{productId}")
-	@ApiOperation("get a Product")
-	@ApiResponses(value = { @ApiResponse(code = 200, message = "get a Product"),
-			@ApiResponse(code = 400, message = "Product Id Not Found") })
-	public ResponseEntity<?> getProduct(@RequestHeader("Authorization") String authorizationToken,
-			@PathVariable String productId) {
-		try {
-			return ResponseEntity.ok(service.getProductBuId(productId));
-		} catch (Exception e) {
-			return ResponseEntity.badRequest().body(e.getMessage());
-		}
-	}
 
 }

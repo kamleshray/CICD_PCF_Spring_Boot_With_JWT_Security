@@ -20,7 +20,7 @@ public class JwtUtil {
 	private String secret;
 
 	//180 Sec
-	public static final long JWT_TOKEN_VALIDITY = 180;
+	public static final long JWT_TOKEN_VALIDITY = 300;
 
 	/**
 	 * Generate the JWT Token
