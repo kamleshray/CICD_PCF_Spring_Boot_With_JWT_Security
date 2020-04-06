@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,6 +35,7 @@ public class SecureProductController {
 	@Autowired
 	private ProductService service;
 
+	@PreAuthorize("hasAuthority('ADMIN') or hasAuthority('USER')")
 	@GetMapping(value = "/getAll", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ApiOperation("Get All Product List")
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Product List retrived Successfully") })
@@ -41,19 +43,23 @@ public class SecureProductController {
 		return ResponseEntity.ok(service.getAllProduct());
 	}
 
+	@PreAuthorize("hasAuthority('ADMIN') or hasAuthority('USER')")
 	@PostMapping("/add")
 	@ApiOperation("Add a Product")
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Product added successfully") })
-	public ResponseEntity<Product> addProduct(@RequestHeader("Authorization") String authorizationToken, @RequestBody Product product) {
+	public ResponseEntity<Product> addProduct(@RequestHeader("Authorization") String authorizationToken,
+			@RequestBody Product product) {
 		Product addProduct = service.addProduct(product);
 		return ResponseEntity.ok(addProduct);
 	}
 
+	@PreAuthorize("hasAuthority('ADMIN')")
 	@PutMapping("/update")
 	@ApiOperation("Update a Product")
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Product Updated successfully"),
 			@ApiResponse(code = 400, message = "Product Id Not Found") })
-	public ResponseEntity<?> updateProduct(@RequestHeader("Authorization") String authorizationToken, @RequestBody Product product) {
+	public ResponseEntity<?> updateProduct(@RequestHeader("Authorization") String authorizationToken,
+			@RequestBody Product product) {
 
 		try {
 			return ResponseEntity.ok(service.updateProduct(product.getProductId(), product));
@@ -62,11 +68,13 @@ public class SecureProductController {
 		}
 	}
 
+	@PreAuthorize("hasAuthority('ADMIN')")
 	@DeleteMapping("/delete/{productId}")
 	@ApiOperation("Delete a Product")
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Product deleted successfully"),
 			@ApiResponse(code = 400, message = "Product Id Not Found") })
-	public ResponseEntity<?> deleteProduct(@RequestHeader("Authorization") String authorizationToken, @PathVariable String productId) {
+	public ResponseEntity<?> deleteProduct(@RequestHeader("Authorization") String authorizationToken,
+			@PathVariable String productId) {
 
 		try {
 			service.removeProduct(productId);
@@ -82,7 +90,8 @@ public class SecureProductController {
 	@ApiOperation("get a Product")
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "get a Product"),
 			@ApiResponse(code = 400, message = "Product Id Not Found") })
-	public ResponseEntity<?> getProduct(@RequestHeader("Authorization") String authorizationToken, @PathVariable String productId) {
+	public ResponseEntity<?> getProduct(@RequestHeader("Authorization") String authorizationToken,
+			@PathVariable String productId) {
 		try {
 			return ResponseEntity.ok(service.getProductBuId(productId));
 		} catch (Exception e) {

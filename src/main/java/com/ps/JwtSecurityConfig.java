@@ -1,10 +1,9 @@
-package com.ps.util;
+package com.ps;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -17,9 +16,12 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.security.web.util.matcher.OrRequestMatcher;
 import org.springframework.security.web.util.matcher.RequestMatcher;
 
-@EnableGlobalMethodSecurity(prePostEnabled = true)
-@EnableWebSecurity
+import com.ps.util.DefaultJwtSuccessHandler;
+import com.ps.util.JwtAuthenticationProvider;
+import com.ps.util.JwtAuthenticationTokenFilter;
+
 @Configuration
+@EnableWebSecurity
 public class JwtSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	private static final RequestMatcher PROTECTED_URLS = new OrRequestMatcher(new AntPathRequestMatcher("/product/secure/**"));
@@ -57,12 +59,12 @@ public class JwtSecurityConfig extends WebSecurityConfigurerAdapter {
 			.exceptionHandling()
 			.and()
 			.authenticationProvider(provider)
-			.addFilterBefore(authenticationTokenFilter(), UsernamePasswordAuthenticationFilter.class)
-			.authorizeRequests().requestMatchers(PROTECTED_URLS)
-			.authenticated()
-			.and()
-			.headers()
-			.cacheControl();
+			.addFilterBefore(authenticationTokenFilter(), UsernamePasswordAuthenticationFilter.class);
+			//.authorizeRequests().requestMatchers(PROTECTED_URLS)
+			//.authenticated()
+			//.and()
+			//.headers()
+			//.cacheControl();
 	}
 
 	@Bean

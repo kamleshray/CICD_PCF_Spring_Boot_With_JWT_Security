@@ -23,13 +23,13 @@ public class TokenController {
         this.jwtGenerator = jwtGenerator;
     }
 
-    @PostMapping
+    @PostMapping("/getNormalUserToken")
     public String generate(String yourName, int yearOfBirth) {
         return jwtGenerator.generate(new JwtUser(yearOfBirth, yourName, "USER"));
 
     }
     
-    @GetMapping("/getSampleToken")
+    @GetMapping("/getAdminToken")
     public String getSampleTokenRequest(){
 		return jwtGenerator.generate(new JwtUser(1990, "Dhananjaya", "ADMIN"));
     }
