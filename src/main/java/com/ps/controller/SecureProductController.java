@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ps.model.Product;
+import com.ps.model.ProductVo;
 import com.ps.model.Response;
 import com.ps.service.ProductService;
 
@@ -36,19 +38,22 @@ public class SecureProductController {
 	@ApiOperation("Add a Product")
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Product added successfully") })
 	public ResponseEntity<Product> addProduct(@RequestHeader("Authorization") String authorizationToken,
-			@RequestBody Product product) {
+			@RequestBody ProductVo productData) {
+		Product product = new ObjectMapper().convertValue(productData, Product.class);
 		Product addProduct = service.addProduct(product);
 		return ResponseEntity.ok(addProduct);
 	}
 
 	@PreAuthorize("hasAuthority('ADMIN')")
-	@PutMapping("/update")
+	@PutMapping("/update/{productId}")
 	@ApiOperation("Update a Product")
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Product Updated successfully"),
 			@ApiResponse(code = 400, message = "Product Id Not Found") })
 	public ResponseEntity<?> updateProduct(@RequestHeader("Authorization") String authorizationToken,
-			@RequestBody Product product) {
+			@PathVariable String productId, @RequestBody ProductVo productData) {
 
+		Product product = new ObjectMapper().convertValue(productData, Product.class);
+		product.setProductId(productId);
 		try {
 			return ResponseEntity.ok(service.updateProduct(product.getProductId(), product));
 		} catch (Exception e) {
