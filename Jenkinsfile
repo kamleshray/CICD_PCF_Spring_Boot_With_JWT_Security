@@ -3,14 +3,9 @@ pipeline {
     stages {
         
         stage ('Build') {
-            
             withMaven(
                 maven: 'maven-3'
-                mavenSettingsConfig: 'my-maven-settings') {
-              // Run the maven build
               sh "mvn clean verify"
-
-            } // withMaven will discover the generated Maven artifacts, JUnit Surefire & FailSafe & FindBugs & SpotBugs reports...
         }
         stage ('Deploy') {
             steps {
