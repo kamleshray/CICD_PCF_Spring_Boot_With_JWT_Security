@@ -2,7 +2,9 @@ pipeline {
     agent any
     stages {
         stage ('Build') {
-            sh 'mvn clean verify'
+            steps {
+                sh 'mvn clean verify'
+            }
         }
         stage ('Deploy') {
             steps {
