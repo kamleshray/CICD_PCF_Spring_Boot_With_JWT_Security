@@ -4,7 +4,7 @@ pipeline {
         
         stage ('Build') {
             steps {
-                    bat 'mvn clean package'
+                    sh 'mvn clean package'
             }
         }
         stage ('Deploy') {
@@ -15,8 +15,8 @@ pipeline {
                                   usernameVariable: 'USERNAME',
                                   passwordVariable: 'PASSWORD']]) {
 
-                    bat 'cf login -a http://api.run.pivotal.io -u %USERNAME% -p %PASSWORD%'
-                    bat 'cf push'
+                    sh 'cf login -a http://api.run.pivotal.io -u %USERNAME% -p %PASSWORD%'
+                    sh 'cf push'
                 }
             }
 
