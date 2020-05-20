@@ -3,10 +3,9 @@ pipeline {
     stages {
         stage('Build') {
                sh 'mvn clean package'
-        }   
+        } 
         stage ('Deploy') {
             steps {
-
                 withCredentials([[$class          : 'UsernamePasswordMultiBinding',
                                   credentialsId   : 'PCF_LOGIN',
                                   usernameVariable: 'USERNAME',
@@ -17,7 +16,6 @@ pipeline {
 
                 }
             }
-
         }
-
     }
+}
