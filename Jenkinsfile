@@ -8,7 +8,7 @@ node {
         checkout scm
     }
     stage('Build'){
-            sh 'mvn clean install'  
+            bat 'mvn clean install'  
     }
     stage('Deploy') {
                 withCredentials([[$class          : 'UsernamePasswordMultiBinding',
@@ -16,8 +16,8 @@ node {
                                   usernameVariable: 'USERNAME',
                                   passwordVariable: 'PASSWORD']]) {
 
-                    sh 'cf login -a http://api.run.pivotal.io -u %USERNAME% -p %PASSWORD%'
-                    sh 'cf push'
+                    bat 'cf login -a http://api.run.pivotal.io -u %USERNAME% -p %PASSWORD%'
+                    bat 'cf push'
 
                 }
     }
