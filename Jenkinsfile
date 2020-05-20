@@ -15,7 +15,7 @@ node {
                                   usernameVariable: 'USERNAME',
                                   passwordVariable: 'PASSWORD']]) {
 
-                    sh 'cf login -a https://api.run.pivotal.io -u %USERNAME% -p %PASSWORD%'
+                    sh 'cf login -a https://api.run.pivotal.io -u $USERNAME -p $PASSWORD'
                     sh 'cf push'
 
                 }
