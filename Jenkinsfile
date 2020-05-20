@@ -1,23 +1,16 @@
-pipeline {
-    agent any
-    stages {
-        
-        stage('Initialize'){
-            steps {
-                dockerHome = tool 'docker'
-                mavenHome  = tool 'mavne'
-                env.PATH = "${dockerHome}/bin:${mavenHome}/bin:${env.PATH}"
-            }
-        }
-
-        
-        stage('Build') {
-            steps {
-               sh 'mvn clean package'
-            }
-        } 
-        stage ('Deploy') {
-            steps {
+node {
+    stage('Initialize'){
+        def dockerHome = tool 'MyDocker'
+        def mavenHome  = tool 'MyMaven'
+        env.PATH = "${dockerHome}/bin:${mavenHome}/bin:${env.PATH}"
+    }
+    stage('Checkout'){
+        checkout scm
+    }
+    stage('Build'){
+            sh 'mvn clean install'  
+    }
+    stage('Deploy') {
                 withCredentials([[$class          : 'UsernamePasswordMultiBinding',
                                   credentialsId   : 'PCF_LOGIN',
                                   usernameVariable: 'USERNAME',
@@ -27,7 +20,5 @@ pipeline {
                     sh 'cf push'
 
                 }
-            }
-        }
     }
 }
