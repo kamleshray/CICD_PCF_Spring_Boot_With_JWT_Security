@@ -1,20 +1,30 @@
-node {
-    stage('Initialize'){
-        def mavenHome  = tool 'MyMaven'
-        env.PATH = "${mavenHome}/bin:${env.PATH}"
-    }
-    stage('Build'){
-            bat 'mvn clean install'  
-    }
-    stage('Deploy') {
+pipeline {
+    agent any
+    stages {
+        
+        stage ('Build') {
+            steps {
+                   sh '''mvn clean package'''
+            }
+        }
+        stage ('Deploy') {
+            steps {
+
                 withCredentials([[$class          : 'UsernamePasswordMultiBinding',
                                   credentialsId   : 'PCF_LOGIN',
                                   usernameVariable: 'USERNAME',
                                   passwordVariable: 'PASSWORD']]) {
 
-                    bat 'cf login -a http://api.run.pivotal.io -u %USERNAME% -p %PASSWORD%'
-                    bat 'cf push'
+                    sh '''
+                        cf login -a http://api.run.pivotal.io -u %USERNAME% -p %PASSWORD%
+                        cf push
+                       '''
 
                 }
+            }
+
+        }
+
     }
+
 }
